@@ -1,9 +1,12 @@
-from .modulos.funciones import lectura, mostrar_matriz, esquina_noroeste, mostrar_matriz_resultante
+from .modulos.calculos import  esquina_noroeste
+from .modulos.mostrar import mostrar_matriz_resultante, mostrar_matriz
+from .modulos.validations import lectura
+
 from .modulos.validations import REG_NUMBER, REG_FLOAT
 
 def menu_transporte() -> None:
+    
     # inicializamos las variables
-
     print('Ingrese la cantidad de destinos:')
     cantidad_destinos = int(lectura(REG_NUMBER))
     print('Ingrese la cantidad de origenes:')
@@ -41,20 +44,22 @@ def menu_transporte() -> None:
     # Obtenemos los resultados por el metodo de la esquina noroeste
     resultados = esquina_noroeste(matriz=matriz_datos, ofertas=ofertas, demandas=demandas)
 
+    # Mostramos los resultados
     print('\nResultados:')
     mostrar_matriz_resultante(resultados=resultados, ofertas=len(ofertas), demandas=len(demandas))
     
+    # Calculamos y mostramos los costos segun la lista de resultados
     print('\nCostos:')
-    # Calculamos los costos
     print('\tCantidad\tCosto\tCosto total')
     costo_total = 0
 
     for resultado in resultados:
+        # Extraemos los valores importantes del diccionario
         valor = resultado['valor']
         coordenada = resultado['coordenada']
         costo = matriz_datos[coordenada[0]][coordenada[1]]
         costo_total += valor*costo
-
+        
         print(f'\t{valor}\t\t{costo}\t{valor*costo}')
 
     print(f'\tTotal: {costo_total}\n')
