@@ -1,4 +1,4 @@
-from numpy import array, transpose, identity
+from numpy import array, transpose, copy
 
 
 def esquina_noroeste(matriz:list[list[float]], ofertas:list[float], demandas:list[float]) -> list[dict]:
@@ -148,7 +148,6 @@ def metodo_hungaro(matriz:list[list]) -> array:
 
     # Definimos esta variable de control de ciclo
     cant_eliminaciones = 0
-    validar = False
 
     while cant_eliminaciones < len(matriz[0]):
         coordenadas_eliminadas = []
@@ -174,9 +173,8 @@ def metodo_hungaro(matriz:list[list]) -> array:
         )
 
         # Si la cantidad de eliminaciones es mayor la longitud de la matriz paramos
-        if cant_eliminaciones >= len(matriz[0]) and validar:
+        if cant_eliminaciones >= len(matriz[0]):
             matriz = transpose(matriz)
-            validar = False
             break
         
         # Devolvemos la matriz a su estado original
@@ -190,15 +188,54 @@ def metodo_hungaro(matriz:list[list]) -> array:
             coordenadas_eliminadas=coordenadas_eliminadas,
             intersecciones=coordenadas_intersecciones
         )
-        validar=True
-
-    # Si quedamos en medio de un ciclo la volvemos a la normalidad
-    matriz = transpose(matriz) if validar else matriz
 
     # Retornamos la matriz resultante
     return matriz
 
 
-def ordenar_metodo_hungaro(matriz:list[list]) -> array:
-    # Inicializamos una matriz donde guardaremos las coordenadas de los costos/columnas que sean 0
-    costos_ceros = []
+def costos_hungaro(matriz_resultado, matriz_costo):
+    # Creamos los indices de los trabajadores
+    trabajadores = []
+    for k in range(len(matriz_resultado)):
+        trabajadores.append(f"Trab {k+1}")
+    
+    coordenadas_esperadas = [[k, k] for k in range(len(matriz_resultado))]
+
+    while True:
+        for k, fila in enumerate(matriz_resultado):
+            cambiado = False
+            for j, valor in enumerate(fila):
+                if valor == 0 and  not cambiado:
+                    # Intercambiamos las filas de la matriz
+                    fila_aux = copy(matriz_resultado[k])
+                    matriz_resultado[k] = matriz_resultado[j]
+                    matriz_resultado[j] = fila_aux
+
+                    # Intercambiamos los indices de los trabajadores
+                    trabajador_aux = trabajadores[k]
+                    trabajadores[k] = trabajadores[j]
+                    trabajadores[j] = trabajador_aux
+
+                    # Intercambiamos la matriz costo
+                    fila_aux = matriz_costo[k]
+                    matriz_costo[k] = matriz_costo[j]
+                    matriz_costo[j] = fila_aux
+
+                    # Marcamos que ya cambiamos las filas
+                    cambiado = True
+        
+        encontradas = 0
+
+        for coordenada in coordenadas_esperadas:
+            if matriz_resultado[coordenada[0]][coordenada[1]] == 0:
+                encontradas += 1
+        
+        if encontradas == len(matriz_resultado):
+            break
+    
+    total = 0
+    for k, trabajador in enumerate(trabajadores):
+        total += matriz_costo[k][k]
+        print(f'{trabajador}: {matriz_costo[k][k]}')
+    print(f'Total: {total}')
+    print('')

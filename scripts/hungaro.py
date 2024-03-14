@@ -1,5 +1,5 @@
 from .modulos.validations import REG_NUMBER, REG_FLOAT, lectura
-from .modulos.calculos import metodo_hungaro
+from .modulos.calculos import metodo_hungaro, costos_hungaro
 from .modulos.mostrar import mostrar_matriz_hungaro
 
 def menu_hungaro() -> None:
@@ -23,6 +23,13 @@ def menu_hungaro() -> None:
         # Después de cargar la lista de datos la anexamos a la matriz de datos
         matriz_datos.append(datos)
     
-    matriz_resultante = metodo_hungaro(matriz=matriz_datos)
-    mostrar_matriz_hungaro(matriz_resultante)
+    # Creamos la copia que sera la matriz de costos
+    matriz_costos = [fila for fila in matriz_datos]
 
+    # Usamos el algotimo del metodo hungaro para encontrar la matriz resultante
+    matriz_resultado = metodo_hungaro(matriz=matriz_datos)
+
+    mostrar_matriz_hungaro(matriz_resultado)
+
+    # Calculamos los costos
+    costos_hungaro(matriz_resultado, matriz_costos)
