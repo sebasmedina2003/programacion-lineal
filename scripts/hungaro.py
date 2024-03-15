@@ -32,4 +32,5 @@ def menu_hungaro() -> None:
     mostrar_matriz_hungaro(matriz_resultado)
 
     # Calculamos los costos
+    print('\nCostos:')
     costos_hungaro(matriz_resultado, matriz_costos)
