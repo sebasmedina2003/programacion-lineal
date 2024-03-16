@@ -5,7 +5,7 @@ from .modulos.validations import lectura
 from .modulos.validations import REG_NUMBER, REG_FLOAT
 
 def menu_transporte() -> None:
-    
+
     # inicializamos las variables
     print('Ingrese la cantidad de destinos:')
     cantidad_destinos = int(lectura(REG_NUMBER))

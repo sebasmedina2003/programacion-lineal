@@ -23,6 +23,11 @@ def menu_hungaro() -> None:
         # Después de cargar la lista de datos la anexamos a la matriz de datos
         matriz_datos.append(datos)
     
+    # Si la matriz no es cuadrada la completamos con ceros hasta que sea cuadrada
+    if cantidad_tareas != cantidad_trabajadores:
+        for _ in range(abs(cantidad_tareas-cantidad_trabajadores)):
+            matriz_datos.append([0 for _ in range(cantidad_tareas)])
+    
     # Creamos la copia que sera la matriz de costos
     matriz_costos = [fila for fila in matriz_datos]
 
